@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="Simple.Human">
+<Super>%Persistent,%Populate</Super>
+<TimeCreated>64642,44528.855744</TimeCreated>
+
+<Parameter name="SPECIES">
+<Default>Человек</Default>
+</Parameter>
+
+<Property name="Name">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Phone">
+<Type>%String</Type>
+</Property>
+
+<Property name="Home">
+<Type>Simple.Address</Type>
+</Property>
+
+<Property name="Work">
+<Type>Simple.Address</Type>
+</Property>
+
+<Method name="%OnNew">
+<FormalSpec>name:%String="",phone:%String,hstate:%String="",wstate:%String=""</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set st = $$$OK
+	set ..Name = name
+	set ..Phone = phone
+	set ..Home.State = hstate
+	set ..Work.State = wstate
+	return st
+]]></Implementation>
+</Method>
+
+<Method name="Print">
+<FormalSpec>state:%String="MA"</FormalSpec>
+<Implementation><![CDATA[
+	write !, ..Name, " lives in ", ..Home.State, ", adn is "	
+	if (..Home.State = state) {
+		write "a ", ..#SPECIES, ". "	
+	}
+	else {
+		write "an extra-terrestrial. "	
+	}
+	write "Phone is ", ..Phone
+]]></Implementation>
+</Method>
+
+<Method name="Insert">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>nm:%String="",ph:%String,sta:%String</FormalSpec>
+<Implementation><![CDATA[
+	set allEmpty = ((nm="") && (ph = "") && (sta = ""))
+	quit:(allEmpty)
+	&sql(insert into Simple.Human(Name,Phone,home_state)
+		values(:nm,:ph,:sta))
+	if (SQLCODE = 0) {
+		&sql(select count(*) into :count from Simple.Human)
+		write !, count, " rows"
+	}
+	else {
+		write !, "SQLCODE: ", SQLCODE, !, %msg	
+	}
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^Simple.HumanD</DataLocation>
+<DefaultData>HumanDefaultData</DefaultData>
+<IdLocation>^Simple.HumanD</IdLocation>
+<IndexLocation>^Simple.HumanI</IndexLocation>
+<StreamLocation>^Simple.HumanS</StreamLocation>
+<ExtentSize>10</ExtentSize>
+<Data name="HumanDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Name</Value>
+</Value>
+<Value name="3">
+<Value>Phone</Value>
+</Value>
+<Value name="4">
+<Value>State</Value>
+</Value>
+<Value name="5">
+<Value>Home</Value>
+</Value>
+<Value name="6">
+<Value>Work</Value>
+</Value>
+</Data>
+<Property name="%%CLASSNAME">
+<Selectivity>100.0000%</Selectivity>
+<AverageFieldSize>1</AverageFieldSize>
+</Property>
+<Property name="%%ID">
+<Selectivity>1</Selectivity>
+<AverageFieldSize>1.1</AverageFieldSize>
+</Property>
+<Property name="Home">
+<Selectivity>10.0000%,City:11.1111%,State:11.1111%,Street:10.0000%,Zip:10.0000%</Selectivity>
+<AverageFieldSize>35.1,City:7.1,State:2,Street:15.8,Zip:5</AverageFieldSize>
+</Property>
+<Property name="Name">
+<Selectivity>10.0000%</Selectivity>
+<AverageFieldSize>16.1</AverageFieldSize>
+</Property>
+<Property name="Phone">
+<Selectivity>10.0000%</Selectivity>
+<AverageFieldSize>12</AverageFieldSize>
+</Property>
+<Property name="State">
+<Selectivity>9.0909%</Selectivity>
+<AverageFieldSize>2</AverageFieldSize>
+</Property>
+<Property name="Work">
+<Selectivity>10.0000%,City:12.5000%,State:10.0000%,Street:10.0000%,Zip:10.0000%</Selectivity>
+<AverageFieldSize>36.9,City:7.2,State:2,Street:17.2,Zip:5</AverageFieldSize>
+</Property>
+<SQLMap name="IDKEY">
+<BlockCount>-4</BlockCount>
+</SQLMap>
+</Storage>
+</Class>
+</Export>
