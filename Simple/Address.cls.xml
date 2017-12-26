@@ -5,6 +5,8 @@
 <TimeCreated>64642,53955.680262</TimeCreated>
 
 <Property name="Street">
+<Description>
+Свойства класса</Description>
 <Type>%String</Type>
 </Property>
 
@@ -25,8 +27,6 @@
 <State>AddressState</State>
 <StreamLocation>^Simple.AddressS</StreamLocation>
 <Data name="AddressState">
-<Structure>listnode</Structure>
-<Subscript/>
 <Value name="1">
 <Value>Street</Value>
 </Value>
